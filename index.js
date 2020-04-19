@@ -68,7 +68,7 @@ const selection = [{
 }];
 
 function viewDepts() {
-  connection.query("SELECT * FROM department", function (err, res) {
+  connection.query("SELECT * FROM department", (err, res) => {
     if (err) throw err;
     console.table(res);
     console.log("------------------------------------------");
@@ -86,7 +86,7 @@ function viewDepts() {
 };
 
 function viewRoles() {
-  connection.query("SELECT * FROM role", function (err, res) {
+  connection.query("SELECT * FROM role", (err, res) => {
     if (err) throw err;
     console.table(res);
     console.log("------------------------------------------");
@@ -104,7 +104,7 @@ function viewRoles() {
 };
 
 function viewEmployees() {
-  connection.query("SELECT * FROM employee", function (err, res) {
+  connection.query("SELECT * FROM employee", (err, res) => {
     if (err) throw err;
     console.table(res);
     console.log("------------------------------------------");
@@ -142,7 +142,7 @@ function addDept() {
           id: answer.id,
           name: answer.name,
         },
-        function (err) {
+        (err) => {
           if (err) throw err;
           console.log("Your department was created successfully!");
           inquirer
@@ -250,7 +250,7 @@ function addEmployee() {
           role_id: answer.roleId,
           manager_id: answer.managerId
         },
-        function (err) {
+        (err) => {
           if (err) throw err;
           console.log("Your new role was created successfully!");
           inquirer
@@ -269,5 +269,43 @@ function addEmployee() {
 };
 
 function updateEmployee() {
-  console.log("update employee");
-};
+  inquirer
+    .prompt([
+      {
+        name: "id",
+        type: "number",
+        message: "Id of employee you would like to update?",
+      },
+      {
+        name: "roleId",
+        type: "number",
+        message: "What is the new role id for your employee?",
+      }
+    ]).then((answer) => {
+      connection.query(
+        "UPDATE employee SET ? WHERE ?",
+        [
+          {
+            role_id: answer.roleId
+          },
+          {
+            id: answer.id
+          }
+        ],
+        (err) => {
+          if (err) throw err;
+          console.log("Employee role updated successfully!");
+          inquirer
+            .prompt(selection)
+            .then((answer) => {
+              if (answer.selection === "No") {
+                console.log("Thank you, goodbye!");
+                connection.end();
+              } else {
+                list();
+              }
+            })
+        }
+      )
+    })
+}
