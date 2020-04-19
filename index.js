@@ -1,7 +1,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
@@ -52,6 +52,7 @@ function list() {
           break
         case "Add an employee":
           addEmployee()
+          break
         case "Update employee role":
           updateEmployee()
           break
@@ -76,9 +77,9 @@ function viewDepts() {
       .then((answer) => {
         if (answer.selection === "No") {
           console.log("Thank you, goodbye!");
-          connection.end(); 
+          connection.end();
         } else {
-        list();
+          list();
         }
       })
   });
@@ -94,9 +95,9 @@ function viewRoles() {
       .then((answer) => {
         if (answer.selection === "No") {
           console.log("Thank you, goodbye!");
-          connection.end(); 
+          connection.end();
         } else {
-        list();
+          list();
         }
       })
   });
@@ -112,24 +113,159 @@ function viewEmployees() {
       .then((answer) => {
         if (answer.selection === "No") {
           console.log("Thank you, goodbye!");
-          connection.end(); 
+          connection.end();
         } else {
-        list();
+          list();
         }
       })
   });
 };
 
 function addDept() {
-  console.log("add dept");
+  inquirer
+    .prompt([
+      {
+        name: "id",
+        type: "input",
+        message: "What is the id number of the new department?"
+      },
+      {
+        name: "name",
+        type: "input",
+        message: "What is the name of the new department?"
+      },
+    ])
+    .then((answer) => {
+      connection.query(
+        "INSERT INTO department SET ?",
+        {
+          id: answer.id,
+          name: answer.name,
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("Your department was created successfully!");
+          inquirer
+            .prompt(selection)
+            .then((answer) => {
+              if (answer.selection === "No") {
+                console.log("Thank you, goodbye!");
+                connection.end();
+              } else {
+                list();
+              }
+            })
+        }
+      );
+    });
 };
 
 function addRole() {
-  console.log("add role");
+  inquirer
+    .prompt([
+      {
+        name: "id",
+        type: "input",
+        message: "What is the id number of the new role?"
+      },
+      {
+        name: "title",
+        type: "input",
+        message: "What is the title of the new role?"
+      },
+      {
+        name: "salary",
+        type: "input",
+        message: "What is the salary of the new role?"
+      },
+      {
+        name: "deptId",
+        type: "input",
+        message: "What is the department id of the new role?"
+      }
+    ])
+    .then((answer) => {
+      connection.query(
+        "INSERT INTO role SET ?",
+        {
+          id: answer.id,
+          title: answer.title,
+          salary: answer.salary,
+          department_id: answer.deptId
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("Your new role was created successfully!");
+          inquirer
+            .prompt(selection)
+            .then((answer) => {
+              if (answer.selection === "No") {
+                console.log("Thank you, goodbye!");
+                connection.end();
+              } else {
+                list();
+              }
+            })
+        }
+      );
+    });
 };
 
 function addEmployee() {
-  console.log("add employee");
+  inquirer
+    .prompt([
+      {
+        name: "id",
+        type: "input",
+        message: "What is the id number of the new employee?"
+      },
+      {
+        name: "firstName",
+        type: "input",
+        message: "What is the first name of the new employee?"
+      },
+      {
+        name: "lastName",
+        type: "input",
+        message: "What is the last name of the new employee?"
+      },
+      {
+        name: "roleId",
+        type: "input",
+        message: "What is the role id of the new employee?"
+      },
+      {
+        name: "managerId",
+        type: "input",
+        message: "What is the manager id of the new employee? (can be blank)"
+      }
+    ])
+    .then((answer) => {
+      connection.query(
+        "INSERT INTO employee SET ?",
+        {
+          id: answer.id,
+          first_name: answer.firstName,
+          last_name: answer.lastName,
+          role_id: answer.roleId,
+          manager_id: answer.managerId
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("Your new role was created successfully!");
+          inquirer
+            .prompt(selection)
+            .then((answer) => {
+              if (answer.selection === "No") {
+                console.log("Thank you, goodbye!");
+                connection.end();
+              } else {
+                list();
+              }
+            })
+        }
+      );
+    });
 };
 
 function updateEmployee() {
