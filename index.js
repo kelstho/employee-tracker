@@ -14,10 +14,10 @@ connection.connect((err) => {
   console.log("------------------------------------------")
   console.log("Welcome to the Employee Management System!");
   console.log("------------------------------------------")
-  start();
+  list();
 });
 
-function start() {
+function list() {
   inquirer
     .prompt({
       name: "options",
@@ -59,16 +59,65 @@ function start() {
     })
 };
 
+const selection = [{
+  name: "selection",
+  type: "list",
+  message: "Would you like to make another selection?",
+  choices: ["Yes", "No"]
+}];
+
 function viewDepts() {
-  console.log("view depts");
+  connection.query("SELECT * FROM department", function (err, res) {
+    if (err) throw err;
+    console.table(res);
+    console.log("------------------------------------------");
+    inquirer
+      .prompt(selection)
+      .then((answer) => {
+        if (answer.selection === "No") {
+          console.log("Thank you, goodbye!");
+          connection.end(); 
+        } else {
+        list();
+        }
+      })
+  });
 };
 
 function viewRoles() {
-  console.log("view roles");
+  connection.query("SELECT * FROM role", function (err, res) {
+    if (err) throw err;
+    console.table(res);
+    console.log("------------------------------------------");
+    inquirer
+      .prompt(selection)
+      .then((answer) => {
+        if (answer.selection === "No") {
+          console.log("Thank you, goodbye!");
+          connection.end(); 
+        } else {
+        list();
+        }
+      })
+  });
 };
 
 function viewEmployees() {
-  console.log("view employees");
+  connection.query("SELECT * FROM employee", function (err, res) {
+    if (err) throw err;
+    console.table(res);
+    console.log("------------------------------------------");
+    inquirer
+      .prompt(selection)
+      .then((answer) => {
+        if (answer.selection === "No") {
+          console.log("Thank you, goodbye!");
+          connection.end(); 
+        } else {
+        list();
+        }
+      })
+  });
 };
 
 function addDept() {
