@@ -238,6 +238,7 @@ function addEmployee() {
         name: "managerId",
         type: "number",
         message: "What is the manager id of the new employee? (can be blank)",
+        default: 0
       }
     ])
     .then((answer) => {
