@@ -126,7 +126,7 @@ function addDept() {
     .prompt([
       {
         name: "id",
-        type: "input",
+        type: "number",
         message: "What is the id number of the new department?"
       },
       {
@@ -165,7 +165,7 @@ function addRole() {
     .prompt([
       {
         name: "id",
-        type: "input",
+        type: "number",
         message: "What is the id number of the new role?"
       },
       {
@@ -175,12 +175,12 @@ function addRole() {
       },
       {
         name: "salary",
-        type: "input",
+        type: "number",
         message: "What is the salary of the new role?"
       },
       {
         name: "deptId",
-        type: "input",
+        type: "number",
         message: "What is the department id of the new role?"
       }
     ])
@@ -216,7 +216,7 @@ function addEmployee() {
     .prompt([
       {
         name: "id",
-        type: "input",
+        type: "number",
         message: "What is the id number of the new employee?"
       },
       {
@@ -231,13 +231,13 @@ function addEmployee() {
       },
       {
         name: "roleId",
-        type: "input",
+        type: "number",
         message: "What is the role id of the new employee?"
       },
       {
         name: "managerId",
-        type: "input",
-        message: "What is the manager id of the new employee? (can be blank)"
+        type: "number",
+        message: "What is the manager id of the new employee? (can be blank)",
       }
     ])
     .then((answer) => {
